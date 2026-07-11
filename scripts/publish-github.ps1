@@ -12,21 +12,19 @@ $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";
     [System.Environment]::GetEnvironmentVariable("Path", "User")
 
 gh auth status
-$visibility = if ($Private) { "--private" } else { "--public" }
 
-# Create org/user repo if missing
-$exists = $true
-gh repo view "$Owner/$Repo" 2>$null | Out-Null
-if ($LASTEXITCODE -ne 0) {
-    $exists = $false
-}
+$visibility = if ($Private) { "private" } else { "public" }
+$fullName = "$Owner/$Repo"
+
+gh repo view $fullName 2>$null | Out-Null
+$exists = ($LASTEXITCODE -eq 0)
 
 if (-not $exists) {
-    Write-Host "Creating GitHub repo $Owner/$Repo ..."
-    gh repo create "$Owner/$Repo" $visibility --source . --remote origin --description "Local MCP bridge for Autodesk Navisworks Manage 2026 — Clash Detective, evidence packs, path-guarded reports."
+    Write-Host "Creating GitHub repo $fullName ..."
+    gh repo create $fullName --$visibility --source . --remote origin --description "Local MCP bridge for Autodesk Navisworks Manage 2026. Clash Detective, evidence packs, path-guarded reports."
 }
 else {
-    $url = "https://github.com/$Owner/$Repo.git"
+    $url = "https://github.com/$fullName.git"
     $remote = git remote get-url origin 2>$null
     if (-not $remote) {
         git remote add origin $url
@@ -35,5 +33,5 @@ else {
 
 git push -u origin HEAD
 git push origin v0.1.0
-Write-Host "Published: https://github.com/$Owner/$Repo"
-Write-Host "Tag: v0.1.0 (create a GitHub Release after plugin zip is built on a NW machine)."
+Write-Host "Published: https://github.com/$fullName"
+Write-Host "Tag: v0.1.0"
