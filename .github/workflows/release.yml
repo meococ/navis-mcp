@@ -6,6 +6,10 @@ on:
       - "v*"
   workflow_dispatch:
     inputs:
+      tag:
+        description: "Existing tag to attach release assets to (e.g. v0.1.0). Required for manual runs."
+        required: true
+        type: string
       plugin_artifact_name:
         description: "Optional workflow artifact name containing pre-built plugin DLLs"
         required: false
@@ -18,6 +22,9 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
+
       - uses: actions/setup-dotnet@v4
         with:
           global-json-file: global.json
@@ -39,7 +46,6 @@ jobs:
             Write-Host "Navisworks present on runner; plugin will be built from API refs."
             exit 0
           }
-          # Prefer dedicated plugin-cache tag, then newest release that has the asset.
           $candidates = @("plugin-cache")
           try {
             $latest = gh release list --limit 20 --json tagName -q ".[].tagName"
@@ -57,7 +63,7 @@ jobs:
               }
             }
           }
-          Write-Host "::warning::No Navisworks on runner and no plugin-navis2026.zip in releases yet. Pack step will fail unless a maintainer seeds plugin-cache (see docs/marketplace.md)."
+          Write-Host "::warning::No Navisworks on runner and no plugin-navis2026.zip in releases yet."
           exit 0
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -74,9 +80,23 @@ jobs:
             ./packaging/build-release.ps1
           }
 
+      - name: Resolve release tag
+        id: meta
+        shell: pwsh
+        run: |
+          $tag = "${{ github.event.inputs.tag }}"
+          if ([string]::IsNullOrWhiteSpace($tag)) {
+            $tag = "${{ github.ref_name }}"
+          }
+          if (-not $tag.StartsWith("v")) {
+            throw "Release tag must look like v0.1.0 (got '$tag')."
+          }
+          "tag=$tag" >> $env:GITHUB_OUTPUT
+
       - name: Upload release assets
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.meta.outputs.tag }}
           files: |
             dist/NavisMcp-*-win-x64.zip
             dist/plugin-navis2026.zip
@@ -96,7 +116,7 @@ jobs:
             }
           }
           if (Test-Path dist/plugin-navis2026.zip) {
-            gh release upload "${{ github.ref_name }}" dist/plugin-navis2026.zip --clobber
+            gh release upload "${{ steps.meta.outputs.tag }}" dist/plugin-navis2026.zip --clobber
           }
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
