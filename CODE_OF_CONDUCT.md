@@ -23,7 +23,7 @@ Examples of unacceptable behavior:
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported via [GitHub Security Advisories](https://github.com/navis-mcp/navis-mcp/security/advisories/new) (private) or by contacting the maintainers listed in [MAINTAINERS.md](MAINTAINERS.md).
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported via [GitHub Security Advisories](https://github.com/meococ/navis-mcp/security/advisories/new) (private) or by contacting the maintainers listed in [MAINTAINERS.md](MAINTAINERS.md).
 
 Maintainers will review and investigate all complaints and respond appropriately. Maintainers are obligated to maintain confidentiality with regard to the reporter of an incident.
 

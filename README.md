@@ -1,6 +1,6 @@
 # NavisMcp
 
-[![CI Server](https://github.com/navis-mcp/navis-mcp/actions/workflows/ci-server.yml/badge.svg)](https://github.com/navis-mcp/navis-mcp/actions/workflows/ci-server.yml)
+[![CI Server](https://github.com/meococ/navis-mcp/actions/workflows/ci-server.yml/badge.svg)](https://github.com/meococ/navis-mcp/actions/workflows/ci-server.yml)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
 Local MCP bridge for **Autodesk Navisworks Manage 2026**. An AI agent can inspect federated models, search and select items, capture native viewport snapshots, run Clash Detective workflows, and write guarded reports — without arbitrary code execution.

@@ -10,7 +10,7 @@
   Author="NavisMcp contributors"
   ProductCode="{9E0788D7-5F1B-4D9C-951A-E633C0D45BC9}"
   UpgradeCode="{5F157EB0-1A6B-4623-A4CB-EAEF5072F37C}">
-  <CompanyDetails Name="NavisMcp" Url="https://github.com/navis-mcp/navis-mcp" Email="security@navis-mcp.dev" />
+  <CompanyDetails Name="NavisMcp" Url="https://github.com/meococ/navis-mcp" Email="security@navis-mcp.dev" />
   <Components>
     <RuntimeRequirements OS="Win64" Platform="NAVMAN" SeriesMin="Nw23" SeriesMax="Nw23" />
     <ComponentEntry

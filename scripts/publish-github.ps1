@@ -1,5 +1,5 @@
 param(
-    [string]$Owner = "navis-mcp",
+    [string]$Owner = "meococ",
     [string]$Repo = "navis-mcp",
     [switch]$Private
 )

@@ -6,7 +6,7 @@ Security fixes are accepted for the latest published `0.x` / `1.x` release line.
 
 ## Reporting a vulnerability
 
-**Preferred:** open a private [GitHub Security Advisory](https://github.com/navis-mcp/navis-mcp/security/advisories/new) on this repository.
+**Preferred:** open a private [GitHub Security Advisory](https://github.com/meococ/navis-mcp/security/advisories/new) on this repository.
 
 **Email:** `security@navis-mcp.dev` (see [MAINTAINERS.md](MAINTAINERS.md)).
 
