@@ -15,6 +15,19 @@
 2. Zip must contain `server/`, `bundle/NavisMcp.bundle/Contents/v23/NavisMcp.Plugin.Navis2026.dll`, `scripts/`, `samples/`.
 3. Capability matrix and SECURITY.md must match the shipped surface.
 
+### GitHub Actions (public runners)
+
+Hosted runners do **not** have Navisworks. Seed a reusable plugin cache once from a licensed machine:
+
+```powershell
+.\packaging\build-release.ps1
+# also produces dist\plugin-navis2026.zip (plugin DLLs only; no Autodesk DLLs)
+gh release create plugin-cache dist\plugin-navis2026.zip --title "Plugin cache (Navisworks 2026)" --notes "CI input for tag releases. Rebuild when the plugin changes."
+gh release create vX.Y.Z dist\NavisMcp-X.Y.Z-win-x64.zip dist\plugin-navis2026.zip --generate-notes
+```
+
+Subsequent `v*` tag pushes download `plugin-navis2026.zip` from `plugin-cache` (or the latest release that has it) and pack a full zip.
+
 ## Autodesk Design & Make / Assistant readiness (Phase C)
 
 When submitting as a third-party MCP for Autodesk Assistant:

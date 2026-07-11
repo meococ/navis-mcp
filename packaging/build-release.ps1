@@ -133,6 +133,15 @@ NavisMcp $Version
     }
     Compress-Archive -Path (Join-Path $stage "*") -DestinationPath $zipPath -Force
     Write-Host "Created $zipPath"
+
+    if ($pluginCopied) {
+        $pluginCacheZip = Join-Path $dist "plugin-navis2026.zip"
+        if (Test-Path $pluginCacheZip) {
+            Remove-Item -LiteralPath $pluginCacheZip -Force
+        }
+        Compress-Archive -Path (Join-Path $contents "*") -DestinationPath $pluginCacheZip -Force
+        Write-Host "Created $pluginCacheZip (CI plugin cache; no Autodesk DLLs)"
+    }
 }
 finally {
     Pop-Location

@@ -21,13 +21,48 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           global-json-file: global.json
-      - name: Download pre-built plugin artifact (optional)
+
+      - name: Download pre-built plugin artifact (optional workflow_dispatch)
         if: ${{ github.event.inputs.plugin_artifact_name != '' }}
         uses: actions/download-artifact@v4
         with:
           name: ${{ github.event.inputs.plugin_artifact_name }}
           path: .plugin-prebuilt
-      - name: Pack release zip (fails if plugin DLL missing)
+
+      - name: Download plugin cache from latest release (public runners)
+        if: ${{ github.event.inputs.plugin_artifact_name == '' }}
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path .plugin-prebuilt | Out-Null
+          $api = "C:\Program Files\Autodesk\Navisworks Manage 2026\Autodesk.Navisworks.Api.dll"
+          if (Test-Path $api) {
+            Write-Host "Navisworks present on runner; plugin will be built from API refs."
+            exit 0
+          }
+          # Prefer dedicated plugin-cache tag, then newest release that has the asset.
+          $candidates = @("plugin-cache")
+          try {
+            $latest = gh release list --limit 20 --json tagName -q ".[].tagName"
+            $candidates += ($latest | Where-Object { $_ -and $_ -ne "plugin-cache" })
+          } catch { }
+          foreach ($tag in $candidates) {
+            Write-Host "Trying plugin-navis2026.zip from release $tag ..."
+            gh release download $tag -p "plugin-navis2026.zip" -D .plugin-prebuilt --clobber 2>$null
+            if (Test-Path ".plugin-prebuilt/plugin-navis2026.zip") {
+              Expand-Archive -LiteralPath ".plugin-prebuilt/plugin-navis2026.zip" -DestinationPath ".plugin-prebuilt/unpacked" -Force
+              $dll = Get-ChildItem .plugin-prebuilt/unpacked -Recurse -Filter "NavisMcp.Plugin.Navis2026.dll" | Select-Object -First 1
+              if ($dll) {
+                Write-Host "Using cached plugin from $tag : $($dll.FullName)"
+                exit 0
+              }
+            }
+          }
+          Write-Host "::warning::No Navisworks on runner and no plugin-navis2026.zip in releases yet. Pack step will fail unless a maintainer seeds plugin-cache (see docs/marketplace.md)."
+          exit 0
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pack release zip
         shell: pwsh
         run: |
           $prebuilt = Get-ChildItem -Path .plugin-prebuilt -Recurse -Filter "NavisMcp.Plugin.Navis2026.dll" -ErrorAction SilentlyContinue |
@@ -36,13 +71,32 @@ jobs:
             ./packaging/build-release.ps1 -PluginDllPath $prebuilt.FullName
           }
           else {
-            # Requires Navisworks Manage 2026 on the runner (self-hosted) or a pre-built plugin artifact.
             ./packaging/build-release.ps1
           }
-      - name: Upload release asset
+
+      - name: Upload release assets
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/*.zip
+          files: |
+            dist/NavisMcp-*-win-x64.zip
+            dist/plugin-navis2026.zip
           generate_release_notes: true
+          fail_on_unmatched_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Ensure plugin cache zip is attached
+        shell: pwsh
+        run: |
+          if (-not (Test-Path dist/plugin-navis2026.zip)) {
+            $dll = Get-ChildItem dist/stage/bundle -Recurse -Filter "NavisMcp.Plugin.Navis2026.dll" -ErrorAction SilentlyContinue |
+              Select-Object -First 1
+            if ($dll) {
+              Compress-Archive -Path (Join-Path $dll.Directory.FullName "*") -DestinationPath dist/plugin-navis2026.zip -Force
+            }
+          }
+          if (Test-Path dist/plugin-navis2026.zip) {
+            gh release upload "${{ github.ref_name }}" dist/plugin-navis2026.zip --clobber
+          }
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
