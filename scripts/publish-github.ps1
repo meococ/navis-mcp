@@ -16,8 +16,14 @@ gh auth status
 $visibility = if ($Private) { "private" } else { "public" }
 $fullName = "$Owner/$Repo"
 
-gh repo view $fullName 2>$null | Out-Null
-$exists = ($LASTEXITCODE -eq 0)
+$exists = $false
+try {
+    gh repo view $fullName 2>$null | Out-Null
+    if ($LASTEXITCODE -eq 0) { $exists = $true }
+}
+catch {
+    $exists = $false
+}
 
 if (-not $exists) {
     Write-Host "Creating GitHub repo $fullName ..."
@@ -32,6 +38,6 @@ else {
 }
 
 git push -u origin HEAD
-git push origin v0.1.0
+git push origin v0.1.0 --force
 Write-Host "Published: https://github.com/$fullName"
 Write-Host "Tag: v0.1.0"
