@@ -1,0 +1,41 @@
+# Build
+bin/
+obj/
+.vs/
+.vscode/
+*.user
+*.suo
+dist/
+artifacts/
+*.nupkg
+*.snupkg
+
+# Runtime project roots (if someone points --project-root at the clone)
+exports/
+snapshots/
+reports/
+models/
+logs/
+
+# BIM binaries
+*.nwd
+*.nwf
+*.nwc
+
+# Local MCP config (commit only *.example)
+.mcp.json
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Local agent / research clutter
+.review-*/
+.cursor/
+RULE/
+SKILL/
+_merge_backup_docs/
+__pycache__/
+*.pyc
+bundle/

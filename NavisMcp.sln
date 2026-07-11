@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CEB1E011-4F14-4A96-8BAE-375DC1E652E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavisMcp.Contracts", "src\NavisMcp.Contracts\NavisMcp.Contracts.csproj", "{95A05908-AA10-47F7-B0FF-B5DE5827FF93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavisMcp.Server", "src\NavisMcp.Server\NavisMcp.Server.csproj", "{363EA326-9D8C-49DA-A769-C8C92D6C1EEC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavisMcp.Plugin.Navis2026", "src\NavisMcp.Plugin.Navis2026\NavisMcp.Plugin.Navis2026.csproj", "{CF0F52FF-E022-48BD-9D99-DAF2A699AB97}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B12E4204-7DD8-4AD8-8BA7-A9417DB7B4A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavisMcp.Server.Tests", "tests\NavisMcp.Server.Tests\NavisMcp.Server.Tests.csproj", "{A806CE34-A11A-404F-ADA8-079386E6568D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavisMcp.FakeBridge", "tests\NavisMcp.FakeBridge\NavisMcp.FakeBridge.csproj", "{DA6C2C72-1102-4A73-BBBF-E62C3BCC1129}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{95A05908-AA10-47F7-B0FF-B5DE5827FF93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95A05908-AA10-47F7-B0FF-B5DE5827FF93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95A05908-AA10-47F7-B0FF-B5DE5827FF93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95A05908-AA10-47F7-B0FF-B5DE5827FF93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{363EA326-9D8C-49DA-A769-C8C92D6C1EEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{363EA326-9D8C-49DA-A769-C8C92D6C1EEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{363EA326-9D8C-49DA-A769-C8C92D6C1EEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{363EA326-9D8C-49DA-A769-C8C92D6C1EEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF0F52FF-E022-48BD-9D99-DAF2A699AB97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF0F52FF-E022-48BD-9D99-DAF2A699AB97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF0F52FF-E022-48BD-9D99-DAF2A699AB97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF0F52FF-E022-48BD-9D99-DAF2A699AB97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A806CE34-A11A-404F-ADA8-079386E6568D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A806CE34-A11A-404F-ADA8-079386E6568D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A806CE34-A11A-404F-ADA8-079386E6568D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A806CE34-A11A-404F-ADA8-079386E6568D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA6C2C72-1102-4A73-BBBF-E62C3BCC1129}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA6C2C72-1102-4A73-BBBF-E62C3BCC1129}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA6C2C72-1102-4A73-BBBF-E62C3BCC1129}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA6C2C72-1102-4A73-BBBF-E62C3BCC1129}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{95A05908-AA10-47F7-B0FF-B5DE5827FF93} = {CEB1E011-4F14-4A96-8BAE-375DC1E652E8}
+		{363EA326-9D8C-49DA-A769-C8C92D6C1EEC} = {CEB1E011-4F14-4A96-8BAE-375DC1E652E8}
+		{CF0F52FF-E022-48BD-9D99-DAF2A699AB97} = {CEB1E011-4F14-4A96-8BAE-375DC1E652E8}
+		{A806CE34-A11A-404F-ADA8-079386E6568D} = {B12E4204-7DD8-4AD8-8BA7-A9417DB7B4A6}
+		{DA6C2C72-1102-4A73-BBBF-E62C3BCC1129} = {B12E4204-7DD8-4AD8-8BA7-A9417DB7B4A6}
+	EndGlobalSection
+EndGlobal

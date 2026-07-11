@@ -1,0 +1,28 @@
+name: CI Server
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  build-test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Restore
+        run: dotnet restore NavisMcp.sln
+      - name: Build contracts and server
+        run: |
+          dotnet build src/NavisMcp.Contracts/NavisMcp.Contracts.csproj -c Release --no-restore
+          dotnet build src/NavisMcp.Server/NavisMcp.Server.csproj -c Release --no-restore
+          dotnet build tests/NavisMcp.FakeBridge/NavisMcp.FakeBridge.csproj -c Release --no-restore
+          dotnet build tests/NavisMcp.Server.Tests/NavisMcp.Server.Tests.csproj -c Release --no-restore
+      - name: Test
+        run: dotnet test tests/NavisMcp.Server.Tests/NavisMcp.Server.Tests.csproj -c Release --no-build --logger "console;verbosity=normal"
+      - name: FakeBridge smoke
+        shell: pwsh
+        run: ./scripts/smoke-fake-bridge.ps1

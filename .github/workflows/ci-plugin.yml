@@ -1,0 +1,33 @@
+name: CI Plugin (compile check)
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  plugin-compile:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Compile plugin when Navisworks API is present
+        shell: pwsh
+        run: |
+          $api = "C:\Program Files\Autodesk\Navisworks Manage 2026\Autodesk.Navisworks.Api.dll"
+          if (-not (Test-Path $api)) {
+            Write-Host "::notice::Navisworks Manage 2026 not installed on this runner."
+            Write-Host "Plugin compile is skipped on public GitHub-hosted runners."
+            Write-Host "Maintainers must build the plugin on a licensed machine and use -PluginDllPath for releases."
+            Write-Host "See docs/contributing.md and packaging/build-release.ps1."
+            exit 0
+          }
+          dotnet build src/NavisMcp.Plugin.Navis2026/NavisMcp.Plugin.Navis2026.csproj -c Release -p:Platform=x64
+          $dll = Get-ChildItem src/NavisMcp.Plugin.Navis2026/bin -Recurse -Filter "NavisMcp.Plugin.Navis2026.dll" |
+            Sort-Object LastWriteTime -Descending |
+            Select-Object -First 1
+          if (-not $dll) { throw "Plugin build succeeded but DLL not found." }
+          Write-Host "Built $($dll.FullName)"

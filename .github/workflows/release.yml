@@ -1,0 +1,48 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      plugin_artifact_name:
+        description: "Optional workflow artifact name containing pre-built plugin DLLs"
+        required: false
+        default: ""
+
+jobs:
+  release:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Download pre-built plugin artifact (optional)
+        if: ${{ github.event.inputs.plugin_artifact_name != '' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ github.event.inputs.plugin_artifact_name }}
+          path: .plugin-prebuilt
+      - name: Pack release zip (fails if plugin DLL missing)
+        shell: pwsh
+        run: |
+          $prebuilt = Get-ChildItem -Path .plugin-prebuilt -Recurse -Filter "NavisMcp.Plugin.Navis2026.dll" -ErrorAction SilentlyContinue |
+            Select-Object -First 1
+          if ($prebuilt) {
+            ./packaging/build-release.ps1 -PluginDllPath $prebuilt.FullName
+          }
+          else {
+            # Requires Navisworks Manage 2026 on the runner (self-hosted) or a pre-built plugin artifact.
+            ./packaging/build-release.ps1
+          }
+      - name: Upload release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.zip
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

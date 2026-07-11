@@ -1,0 +1,7 @@
+NavisMcp
+Copyright 2026 NavisMcp contributors
+
+This product requires a separately licensed installation of Autodesk Navisworks Manage 2026.
+Autodesk, Navisworks, and related marks are trademarks of Autodesk, Inc.
+This project does not redistribute Autodesk proprietary DLLs or sample models.
+Navisworks API assemblies are referenced at build time from the local Autodesk install only.

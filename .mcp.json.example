@@ -1,0 +1,18 @@
+{
+  "inputs": [],
+  "mcpServers": {
+    "navisworks-local": {
+      "type": "stdio",
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "PATH/TO/navis-mcp/src/NavisMcp.Server/NavisMcp.Server.csproj",
+        "--",
+        "--project-root",
+        "PATH/TO/YOUR/BIM/PROJECT",
+        "--allow-writes"
+      ]
+    }
+  }
+}
